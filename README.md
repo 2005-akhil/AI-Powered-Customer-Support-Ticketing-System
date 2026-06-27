@@ -1,58 +1,52 @@
-# Salesforce DX Project
+# AI-Powered Customer Support Ticketing System
 
-Salesforce DX is a development approach that brings source-driven development, team collaboration, and continuous integration to the Salesforce Platform. Instead of working directly in an org through a web browser, you work with metadata as source files in a local DX project, track changes in version control, and deploy through automated processes.
+A scalable, maintainable, and automation-driven support solution built entirely using core Salesforce Administration and Flow features within a Developer Org. This system centralizes customer data, automates case lifecycles, enforces SLAs, and provides intelligent agent assistance to dramatically reduce support turnaround times.
 
-This project template gets you started with the tools and structure you need to build Salesforce applications using source control, scratch orgs, and the Salesforce CLI.
+---
 
-## Prerequisites
+## 🚀 Project Overview & Objectives
+Managing rapid influxes of support queries while maintaining strict Service Level Agreements (SLAs) can strain customer service teams. This project addresses that problem by:
+* **Centralizing CRM Data:** Linking tickets seamlessly to individual customer personas and enterprise records.
+* **Intelligent Automation:** Eliminating manual triage by dynamically classifying, prioritizing, and assigning support tickets as they arrive.
+* **Agent Productivity:** Empowering agents with quick actions and contextual UI highlights directly on the ticket canvas.
+* **Continuous Improvement:** Capturing real-world agent feedback to track system accuracy and identify performance gaps.
 
-Before you start, make sure you have:
+---
 
-- **Salesforce CLI** - Download from [developer.salesforce.com/tools/salesforcecli](https://developer.salesforce.com/tools/salesforcecli). See [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm) for details.
-- **VS Code with Salesforce Extension Pack** - See [Installation Instructions](https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/install.html) for details. Includes the Agentforce Vibes extension.
-- **A development org** - Sign up for a free Developer Edition org [here](https://developer.salesforce.com/signup).
-- **Dev Hub enabled** (optional, required to create scratch orgs) - You can enable Dev Hub in your development org under Setup > Dev Hub.  See [Provide Developers Access to Salesforce DX Tools](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_setup_dx_tools.htm).
+## 📊 System Architecture & Data Schema
+The platform builds on Salesforce standard CRM objects and extends functionality through a specialized custom relational schema:
 
-## Project Structure
+### Core Salesforce Standard Objects
+* **Account:** Represents the client organizations and enterprise accounts.
+* **Contact:** Stores individual customer profiles tied to specific Accounts.
+* **Case:** The central engine tracking customer support requests, communication history, and resolution details.
 
-Your DX project follows this structure:
+### Custom Metadata & Objects
+* **Support Category:** A lookup directory that determines how specific inbound complaints should be routed (e.g., Billing, Technical Bug, Account Access).
+* **SLA Policy:** Defines resolution milestones and maximum turnaround thresholds based on customer tiers (e.g., Platinum, Gold, Standard).
+* **AI Feedback:** Stores explicit logs submitted by support agents regarding the accuracy of automated classifications and suggested resolution steps.
 
-- **`force-app/main/default/`** - Your metadata source files live in this default package directory. You can configure additional package directories in the `sfdx-project.json` file.
-- **`config/`** - Scratch org definitions and project settings
-- **`scripts/`** - Automation scripts for common tasks
-- **`sfdx-project.json`** - Project manifest that defines package directories, namespace, API version, and other project-level settings
+---
 
-See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm).
+## ⚙️ Backend Configurations & Automations
+The system operates completely hands-free from triage to routing using advanced **Record-Triggered Flows**:
 
-## Get Started
+* **Automated Case Classification:** Extracts key phrases from the incoming subject/description to automatically populate the `Support Category`.
+* **Dynamic Priority Assignment:** Evaluates the severity of the issue against the customer's Account status to assign realistic urgency flags (`High`, `Medium`, `Low`).
+* **SLA Due Date Calculation:** Whenever a new Case is created, a flow queries the corresponding `SLA Policy` record and computes the precise target date/time for resolution, populating a custom countdown field.
+* **Email-to-Case Triage:** Automatically converts raw external customer emails directly into organized Case records linked to pre-existing Contacts.
 
-Ready to start developing? The [Get Started with Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_get_started_dx.htm) guide walks you through your first project, from creating a scratch org to creating a simple Apex class or LWC to deploying your code to a sandbox.
+---
 
-## Common Salesforce CLI Commands
+## 🎨 UI/UX Design & Security Model
 
-Here are common CLI commands that you'll use the most:
+### Agent Productivity Console
+* **Optimized Record Pages:** Custom Lightning Record Pages built to separate customer historical details, case activity streams, and processing metrics.
+* **Suggested Actions Component:** Context-specific actions dynamically displayed on the Case layout to guide agents through resolution paths based on the case category.
+* **Dashboards & Reports:** Embedded analytics components monitoring active queue volumes, SLA breach rates, and common high-frequency categories.
 
-- `sf org login web`: Authorize an org
-- `sf org open`: Open your org in a browser
-- `sf org create scratch`: Create a scratch org
-- `sf project deploy start`: Deploy metadata to your org
-- `sf project retrieve start`: Retrieve metadata from your org
-- `sf template generate <artifact>`: Scaffold new components, such as Apex classes and triggers, LWC components, Lightning apps, and more
-- `sf apex <command>`: Run Apex tests, run anonymous Apex blocks, and view logs
-- `sf data <command>`: Work with test data
-- `sf alias <command>`: Manage org aliases
-- `sf config <command>`: Configure CLI settings
-
-## Use Agentforce Vibes to Build Lightning Apps
-
-Transform your ideas into custom Lightning apps that extend CRM workflows directly in Lightning Experience. Through natural conversations with Agentforce Vibes, implement custom objects and fields, complex business logic, and dynamic UI components. See [Build a Lightning App Using Agentforce Vibes](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/lexapp-overview.html).
-
-## Additional Resources
-
-- [Agentforce Vibes Developer Guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/einstein-overview.html)
-- [Salesforce CLI Installation Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/)
-- [Salesforce CLI Plugin Development Guide](https://developer.salesforce.com/docs/platform/salesforce-cli-plugin/guide/conceptual-overview.html)
-- [Salesforce VS Code Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-
+### Role-Based Access Control (RBAC)
+To ensure system security, clear boundaries are implemented via profiles and permission sets:
+* **Support Agent:** Read/Write access to assigned Cases, ability to log interactions and submit `AI Feedback`.
+* **Support Manager:** Full CRUD access over cases, supervisor rights to override routing queues, and exclusive access to performance tracking dashboards.
+* **System Administrator:** Complete oversight to modify flow criteria, adjust `SLA Policy` structures, and deploy schema adjustments.
